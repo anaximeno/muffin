@@ -486,7 +486,12 @@ meta_display_handle_event (MetaDisplay        *display,
   if (compositor && !bypass_wayland)
     {
       if (meta_wayland_compositor_handle_event (compositor, event))
-        bypass_clutter = TRUE;
+        {
+          if (event->type == CLUTTER_BUTTON_PRESS)
+             g_signal_emit_by_name (display, "button-pressed", event);
+
+          bypass_clutter = TRUE;
+        }
     }
 #endif
 
